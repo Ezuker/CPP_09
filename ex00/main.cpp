@@ -6,7 +6,7 @@
 /*   By: bcarolle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 17:11:53 by bcarolle          #+#    #+#             */
-/*   Updated: 2024/05/18 15:08:24 by bcarolle         ###   ########.fr       */
+/*   Updated: 2024/05/26 13:19:07 by bcarolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int main(int argc, char **argv)
 		std::cerr << "Can't open data file" << std::endl;
 		return (2);
 	}
-	std::ifstream input_stream("input");
+	std::ifstream input_stream(input.c_str());
 	if (!input_stream)
 	{
 		std::cerr << "Can't open input file" << std::endl;
