@@ -6,7 +6,7 @@
 /*   By: bcarolle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 18:07:31 by bcarolle          #+#    #+#             */
-/*   Updated: 2024/05/27 00:51:45 by bcarolle         ###   ########.fr       */
+/*   Updated: 2024/05/27 01:50:34 by bcarolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,6 @@ bool	BitcoinExchange::parseData(std::ifstream &data)
 		throw WrongDataFile();
 	for (std::map<std::string, float>::iterator it = _data.begin(); it != _data.end(); it++)
 	{
-		std::cout << it->first << " " << it->second << std::endl;
 		if (!validDate(it->first))
 			throw WrongDataFile();
 		if (it->second < 0)
@@ -90,7 +89,23 @@ bool	BitcoinExchange::parseData(std::ifstream &data)
 
 bool	BitcoinExchange::parseInput(std::ifstream &input)
 {
-	(void)input;
+	std::string first;
+	std::getline(input, first);
+	while (input)
+	{
+		std::string line;
+		std::getline(input, line);
+		if (line.empty())
+			break;
+		size_t pos = line.find('|');
+		if (pos == std::string::npos)
+			throw WrongDataFile();
+		std::string date = line.substr(0, pos);
+		std::string amount = line.substr(pos + 1);
+		if (date.empty() || amount.empty())
+			throw WrongDataFile();
+		_input[date] = std::strtold(amount.c_str(), NULL);
+	}
 	return true;
 }
 
