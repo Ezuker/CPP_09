@@ -6,7 +6,7 @@
 /*   By: bcarolle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 18:07:31 by bcarolle          #+#    #+#             */
-/*   Updated: 2024/05/27 01:50:34 by bcarolle         ###   ########.fr       */
+/*   Updated: 2024/05/28 01:09:39 by bcarolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ BitcoinExchange::BitcoinExchange()
 
 BitcoinExchange::~BitcoinExchange()
 {}
+
 static bool	validDate(std::string date)
 {
 	if (date.size() != 10)
@@ -87,6 +88,11 @@ bool	BitcoinExchange::parseData(std::ifstream &data)
 	return true;
 }
 
+void	BitcoinExchange::findData(std::string date, float amount)
+{
+	
+}
+
 bool	BitcoinExchange::parseInput(std::ifstream &input)
 {
 	std::string first;
@@ -99,13 +105,24 @@ bool	BitcoinExchange::parseInput(std::ifstream &input)
 			break;
 		size_t pos = line.find('|');
 		if (pos == std::string::npos)
-			throw WrongDataFile();
+		{
+			std::cout << "Error: bad input => " << line << std::endl;
+			continue;
+		}
 		std::string date = line.substr(0, pos);
-		std::string amount = line.substr(pos + 1);
-		if (date.empty() || amount.empty())
-			throw WrongDataFile();
-		_input[date] = std::strtold(amount.c_str(), NULL);
-	}
+		float amount = std::strtold(line.substr(pos + 1).c_str(), NULL);
+		if (amount > 2147483647.0)
+		{
+			std::cout << "Error: too large a number." << std::endl;
+			continue;
+		}
+		if (amount < 0)
+		{
+			std::cout << "Error: not a positive number." << std::endl;
+			continue;
+		}
+		findData(date, amount);
+	} 
 	return true;
 }
 

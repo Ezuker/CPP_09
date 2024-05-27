@@ -6,7 +6,7 @@
 /*   By: bcarolle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 18:07:40 by bcarolle          #+#    #+#             */
-/*   Updated: 2024/05/27 01:20:07 by bcarolle         ###   ########.fr       */
+/*   Updated: 2024/05/27 23:28:44 by bcarolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ class BitcoinExchange
 				virtual const char* what() const throw();
 		};
 	private:
+		void	findData(std::string date, float amount);
 		std::map<std::string, float> _data;
 		std::map<std::string, float> _input;
 };
