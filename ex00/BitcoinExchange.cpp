@@ -6,7 +6,7 @@
 /*   By: bcarolle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 18:07:31 by bcarolle          #+#    #+#             */
-/*   Updated: 2024/05/28 01:09:39 by bcarolle         ###   ########.fr       */
+/*   Updated: 2024/05/28 15:18:59 by bcarolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,17 @@ bool	BitcoinExchange::parseData(std::ifstream &data)
 
 void	BitcoinExchange::findData(std::string date, float amount)
 {
-	
+	std::map<std::string, float>::iterator it = _data.lower_bound(date);
+	if (it->first == date)
+	{
+		std::cout << it->first << " => " << amount << " = " << it->second * amount << std::endl;
+		return;
+	}
+	if (it != _data.begin())
+	{
+		it--;
+		std::cout << it->first << " " << amount << " = " << it->second * amount << std::endl;
+	}
 }
 
 bool	BitcoinExchange::parseInput(std::ifstream &input)
