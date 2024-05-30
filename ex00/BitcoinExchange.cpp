@@ -6,7 +6,7 @@
 /*   By: bcarolle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 18:07:31 by bcarolle          #+#    #+#             */
-/*   Updated: 2024/05/28 15:18:59 by bcarolle         ###   ########.fr       */
+/*   Updated: 2024/05/30 19:51:40 by bcarolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ static bool	validDate(std::string date)
 	int year, month, day;
 	char dash;
 	ss >> year >> dash >> month >> dash >> day;
-	if (year < 2009 || year > 2024)
-		return false;
+	// if (year < 2009 || year > 2024)
+	// 	return false;
 	if (month < 1 || month > 12)
 		return false;
 	if (day < 1)
@@ -99,7 +99,13 @@ void	BitcoinExchange::findData(std::string date, float amount)
 	if (it != _data.begin())
 	{
 		it--;
-		std::cout << it->first << " " << amount << " = " << it->second * amount << std::endl;
+		std::cout << it->first << " => " << amount << " = " << it->second * amount << std::endl;
+		return;
+	}
+	if (date < _data.begin()->first)
+	{
+		std::cout << _data.begin()->first << " => " << amount << " = " << _data.begin()->second * amount << std::endl;
+		return;
 	}
 }
 
@@ -107,19 +113,29 @@ bool	BitcoinExchange::parseInput(std::ifstream &input)
 {
 	std::string first;
 	std::getline(input, first);
+	if (first != "date | value")
+	{
+		std::cout << "Need \"date | value\"" << std::endl;
+		return false;
+	}
 	while (input)
 	{
 		std::string line;
 		std::getline(input, line);
 		if (line.empty())
-			break;
+			continue;
 		size_t pos = line.find('|');
 		if (pos == std::string::npos)
 		{
 			std::cout << "Error: bad input => " << line << std::endl;
 			continue;
 		}
-		std::string date = line.substr(0, pos);
+		std::string date = line.substr(0, pos - 1);
+		if (!validDate(date))
+		{
+			std::cout << "Error: bad date => " << line << std::endl;
+			continue;
+		}
 		float amount = std::strtold(line.substr(pos + 1).c_str(), NULL);
 		if (amount > 2147483647.0)
 		{
