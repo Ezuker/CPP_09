@@ -6,7 +6,7 @@
 /*   By: bcarolle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 19:57:02 by bcarolle          #+#    #+#             */
-/*   Updated: 2024/06/01 02:17:14 by bcarolle         ###   ########.fr       */
+/*   Updated: 2024/06/01 23:59:37 by bcarolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,10 @@ void	PmergeMe::printContainer()
 
 void	PmergeMe::printPerf()
 {
-	std::cout << "Time to process a range of " << this->_deque.size() << " elements with std::deque : ";
-	std::cout << this->_dequeTime << std::setprecision(5) << " sec" << std::endl;
-	std::cout << "Time to process a range of " << this->_vector.size() << " elements with std::vector : ";
-	std::cout << this->_vectorTime << std::setprecision(5) << " sec" << std::endl;
+	// std::cout << "Time to process a range of " << this->_deque.size() << " elements with std::deque : ";
+	// std::cout << this->_dequeTime << std::setprecision(5) << " sec" << std::endl;
+	// std::cout << "Time to process a range of " << this->_vector.size() << " elements with std::vector : ";
+	// std::cout << this->_vectorTime << std::setprecision(5) << " sec" << std::endl;
 }
 
 
@@ -87,5 +87,30 @@ void    PmergeMe::sortContainer(Container &content)
             ++it;
         }
     }
-    std::cout << pairContainer.begin()->first << " " << pairContainer.begin()->second << std::endl;
+    // std::cout << pairContainer.begin()->first << " " << pairContainer.begin()->second << std::endl;
+
+	std::sort(content.begin(), content.end());
+	content.insert(binarySearch(content, 6), 6);
+}
+
+template <class Container>
+typename Container::iterator	PmergeMe::binarySearch(Container &content, int toPush)
+{
+	int left = 0;
+	int right = content.size() - 1;
+	while (left <= right)
+	{
+		int middle = floor((left + right) / 2);
+		if (content[middle] < toPush)
+			left = middle + 1;
+		else if (content[middle] > toPush)
+			right = middle;
+		else
+			return content.begin() + middle;
+		if (content[left] > toPush && content[right] > toPush)
+			return content.begin() + left;
+		if (content[left] < toPush && content[right] < toPush)
+			return content.begin() + right + 1;
+	}
+	return content.begin();
 }

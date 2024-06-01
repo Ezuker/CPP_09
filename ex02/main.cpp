@@ -6,7 +6,7 @@
 /*   By: bcarolle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 19:56:58 by bcarolle          #+#    #+#             */
-/*   Updated: 2024/06/01 01:51:56 by bcarolle         ###   ########.fr       */
+/*   Updated: 2024/06/01 02:17:40 by bcarolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int main(int argc, char **argv)
 {
-    PmergeMe merge;
+	PmergeMe	merge;
 
     if (argc == 1)
     {
