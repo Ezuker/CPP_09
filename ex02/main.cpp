@@ -6,7 +6,7 @@
 /*   By: bcarolle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 19:56:58 by bcarolle          #+#    #+#             */
-/*   Updated: 2024/05/30 23:54:29 by bcarolle         ###   ########.fr       */
+/*   Updated: 2024/06/01 01:51:56 by bcarolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,7 @@ int main(int argc, char **argv)
         merge.parseInput(argv);
         std::cout << "Before: ";
         merge.printContainer();
-        merge.sortDeque();
-        merge.sortVector();
+        merge.sort();
         std::cout << "After: ";
         merge.printContainer();
         merge.printPerf();

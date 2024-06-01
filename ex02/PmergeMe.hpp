@@ -6,7 +6,7 @@
 /*   By: bcarolle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 19:57:05 by bcarolle          #+#    #+#             */
-/*   Updated: 2024/05/30 23:55:52 by bcarolle         ###   ########.fr       */
+/*   Updated: 2024/06/01 02:05:36 by bcarolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,11 @@ class PmergeMe
         
         void    parseInput(char **array);
         void    printContainer();
-        void    sortVector();
-        void    sortDeque();
         void    printPerf();
+        void    sort();
     private:
+        template <class Container>
+        void    sortContainer(Container &content);
         std::vector<int> _vector;
         std::deque<int> _deque;
 };

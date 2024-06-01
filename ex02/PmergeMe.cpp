@@ -6,7 +6,7 @@
 /*   By: bcarolle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 19:57:02 by bcarolle          #+#    #+#             */
-/*   Updated: 2024/05/30 23:57:03 by bcarolle         ###   ########.fr       */
+/*   Updated: 2024/06/01 02:11:00 by bcarolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,33 @@ void    PmergeMe::printPerf()
 
 }
 
-void    PmergeMe::sortDeque()
-{
 
+void    PmergeMe::sort()
+{
+    this->sortContainer(this->_vector);
+    this->sortContainer(this->_deque);
 }
 
-void    PmergeMe::sortVector()
+/*
+ * First of the pair is the max and the second one the lowest
+ *
+*/
+template <class Container>
+void    PmergeMe::sortContainer(Container &content)
 {
-    
+    std::vector<std::pair<int, int> > pairContainer;
+
+    /* Group per pair */
+    typename Container::iterator it = content.begin();
+    while (it != content.end())
+    {
+        int first = *it;
+        ++it;
+        if (it != content.end()) {
+            int second = *it;
+            pairContainer.push_back(std::make_pair(first, second));
+            ++it;
+        }
+    }
+    std::cout << pairContainer.begin()->first << " " << pairContainer.begin()->second << std::endl;
 }
