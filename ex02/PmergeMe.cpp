@@ -6,7 +6,7 @@
 /*   By: bcarolle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 19:57:02 by bcarolle          #+#    #+#             */
-/*   Updated: 2024/06/01 02:11:00 by bcarolle         ###   ########.fr       */
+/*   Updated: 2024/06/01 02:17:14 by bcarolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,38 +22,41 @@ PmergeMe::~PmergeMe()
 
 }
 
-void    PmergeMe::parseInput(char **array)
+void	PmergeMe::parseInput(char **array)
 {
-    int i = 1;
-    while (array[i])
-    {
-        long double input_ld = std::strtold(array[i], NULL);
-        if (input_ld - (int)input_ld == 0 && (int)input_ld <= 0x7FFFFFFF && (int)input_ld >= 0)
-        {
-            this->_vector.push_back((int)input_ld);
-            this->_deque.push_back((int)input_ld);
-        }
-        else
-        {
-            throw std::exception();
-        }
-        i++;
-    }
+	int i = 1;
+	while (array[i])
+	{
+		long double input_ld = std::strtold(array[i], NULL);
+		if (input_ld - (int)input_ld == 0 && (int)input_ld <= 0x7FFFFFFF && (int)input_ld >= 0)
+		{
+			this->_vector.push_back((int)input_ld);
+			this->_deque.push_back((int)input_ld);
+		}
+		else
+		{
+			throw std::exception();
+		}
+		i++;
+	}
 }
 
-void    PmergeMe::printContainer()
+void	PmergeMe::printContainer()
 {
-    std::vector<int>::iterator it = this->_vector.begin();
-    for (; it != this->_vector.end(); ++it)
-    {
-        std::cout << *it << " ";
-    }
-    std::cout << std::endl;
+	std::vector<int>::iterator it = this->_vector.begin();
+	for (; it != this->_vector.end(); ++it)
+	{
+		std::cout << *it << " ";
+	}
+	std::cout << std::endl;
 }
 
-void    PmergeMe::printPerf()
+void	PmergeMe::printPerf()
 {
-
+	std::cout << "Time to process a range of " << this->_deque.size() << " elements with std::deque : ";
+	std::cout << this->_dequeTime << std::setprecision(5) << " sec" << std::endl;
+	std::cout << "Time to process a range of " << this->_vector.size() << " elements with std::vector : ";
+	std::cout << this->_vectorTime << std::setprecision(5) << " sec" << std::endl;
 }
 
 
