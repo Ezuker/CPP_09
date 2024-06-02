@@ -6,7 +6,7 @@
 /*   By: bcarolle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 19:57:02 by bcarolle          #+#    #+#             */
-/*   Updated: 2024/06/02 03:09:23 by bcarolle         ###   ########.fr       */
+/*   Updated: 2024/06/02 16:09:22 by bcarolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,23 @@ PmergeMe::~PmergeMe()
 
 }
 
+bool	isDigit(const std::string str)
+{
+	for (size_t i = 0; i < str.size(); i++)
+	{
+		if (!isdigit(str[i]))
+			return false;
+	}
+	return true;
+}
+
 void	PmergeMe::parseInput(char **array)
 {
 	int i = 1;
 	while (array[i])
 	{
+		if (!isDigit(array[i]))
+			throw std::logic_error("NaN");
 		long double input_ld = std::strtold(array[i], NULL);
 		if (input_ld - (int)input_ld == 0 && (int)input_ld <= 0x7FFFFFFF && (int)input_ld >= 0)
 		{
@@ -34,9 +46,7 @@ void	PmergeMe::parseInput(char **array)
 			this->_deque.push_back((int)input_ld);
 		}
 		else
-		{
-			throw std::exception();
-		}
+			throw std::logic_error("Too large number and negative one are forbidden");
 		i++;
 	}
 }
@@ -65,8 +75,8 @@ void    PmergeMe::sort()
 	std::vector<std::pair<int, int> > uPair;
 	std::deque<std::pair<int, int> > uDeque;
 
-    this->sortContainer(this->_vector, uPair);
-    this->sortContainer(this->_deque, uDeque);
+	this->sortContainer(this->_vector, uPair);
+	this->sortContainer(this->_deque, uDeque);
 }
 
 /*
@@ -78,35 +88,43 @@ void    PmergeMe::sortContainer(Container &content, PairContainer &uPair)
 {
 	(void)uPair;
 	PairContainer	pairContent;
-    /* Group per pair */
-    typename Container::iterator it = content.begin();
-    while (it != content.end())
-    {
-        int first = *it;
-        ++it;
-        if (it != content.end()) {
-            int second = *it;
+	/* Group per pair */
+	typename Container::iterator it = content.begin();
+	while (it != content.end())
+	{
+		int first = *it;
+		++it;
+		if (it != content.end()) {
+			int second = *it;
 			if (first > second)
 				pairContent.push_back(std::make_pair(first, second));
 			else
 				pairContent.push_back(std::make_pair(second, first));
-            ++it;
-        }
-    }
+			++it;
+		}
+	}
 	if (!pairContent.size())
 		return;
 
 	Container sortedFinal;
-    recursiveSort(pairContent, 0, pairContent.size() - 1, content);
-	
+	recursiveSort(pairContent, 0, pairContent.size() - 1, content);
+
 	for (typename PairContainer::iterator it = pairContent.begin(); it != pairContent.end(); ++it)
 		sortedFinal.push_back((*it).first);
 
-	content = sortedFinal;
-	content.insert(content.begin(), pairContent[0].second);
+	sortedFinal.insert(sortedFinal.begin(), pairContent[0].second);
 	pairContent.erase(pairContent.begin());
 	for (typename PairContainer::iterator it = pairContent.begin(); it != pairContent.end(); ++it)
-		content.insert(binarySearch(content, (*it).second), (*it).second);
+		sortedFinal.insert(binarySearch(sortedFinal, (*it).second), (*it).second);
+
+	if (content.size() % 2 == 1)
+	{
+		int struggler = content.back();
+		content = sortedFinal;
+		content.insert(binarySearch(content, struggler), struggler);
+		return;
+	}
+	content = sortedFinal;
 }
 
 template <class Container, class Type>
