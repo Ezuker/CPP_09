@@ -6,7 +6,7 @@
 /*   By: bcarolle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 19:57:02 by bcarolle          #+#    #+#             */
-/*   Updated: 2024/06/02 03:05:58 by bcarolle         ###   ########.fr       */
+/*   Updated: 2024/06/02 03:09:23 by bcarolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,32 +137,20 @@ void PmergeMe::merge(Container &content, int left, int middle, int right, Type &
     i = 0;
     j = 0;
     k = left;
+
     while (i < middle - left + 1 && j < right - middle) 
 	{
         if (L[i] <= R[j]) 
-		{
-            content[k].first = L[i];
-            i++;
-        } 
+            content[k++].first = L[i++];
 		else 
-		{
-            content[k].first = R[j];
-            j++;
-        }
-        k++;
+            content[k++].first = R[j++];
     }
-    while (i < middle - left + 1)
-	{
-        content[k].first = L[i];
-        i++;
-        k++;
-    }
-    while (j < right - middle) 
-	{
-        content[k].first = R[j];
-        j++;
-        k++;
-    }
+
+    for (; i < middle - left + 1; i++)
+        content[k++].first = L[i];
+
+    for (; j < right - middle; j++) 
+        content[k++].first = R[j];
 }
 
 template <class Container>
