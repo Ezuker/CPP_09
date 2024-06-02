@@ -6,7 +6,7 @@
 /*   By: bcarolle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 19:57:02 by bcarolle          #+#    #+#             */
-/*   Updated: 2024/06/02 16:09:22 by bcarolle         ###   ########.fr       */
+/*   Updated: 2024/06/02 18:56:18 by bcarolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,30 +53,47 @@ void	PmergeMe::parseInput(char **array)
 
 void	PmergeMe::printContainer()
 {
-	std::vector<int>::iterator it = this->_vector.begin();
-	for (; it != this->_vector.end(); ++it)
-	{
-		std::cout << *it << " ";
+	{	
+		std::cout << "	Vector : ";
+		std::vector<int>::iterator it = this->_vector.begin();
+		for (; it != this->_vector.end(); ++it)
+		{
+			std::cout << *it << " ";
+		}
+		std::cout << std::endl;
 	}
-	std::cout << std::endl;
+	{	
+		std::cout << "	Deque : ";
+		std::deque<int>::iterator it = this->_deque.begin();
+		for (; it != this->_deque.end(); ++it)
+		{
+			std::cout << *it << " ";
+		}
+		std::cout << std::endl;
+	}
 }
 
 void	PmergeMe::printPerf()
 {
-	// std::cout << "Time to process a range of " << this->_deque.size() << " elements with std::deque : ";
-	// std::cout << this->_dequeTime << std::setprecision(5) << " sec" << std::endl;
-	// std::cout << "Time to process a range of " << this->_vector.size() << " elements with std::vector : ";
-	// std::cout << this->_vectorTime << std::setprecision(5) << " sec" << std::endl;
+	std::cout << "Time to process a range of " << this->_deque.size() << " elements with std::deque  : ";
+	std::cout << std::fixed << this->_dequeTime << std::setprecision(6) << " us" << std::endl;
+	std::cout << "Time to process a range of " << this->_vector.size() << " elements with std::vector : ";
+	std::cout << std::fixed << this->_vectorTime << std::setprecision(6) << " us" << std::endl;
 }
 
 
-void    PmergeMe::sort()
+void	PmergeMe::sort()
 {
 	std::vector<std::pair<int, int> > uPair;
 	std::deque<std::pair<int, int> > uDeque;
 
+	clock_t	start;
+	start = clock();
 	this->sortContainer(this->_vector, uPair);
+	this->_vectorTime = double(clock() - start) / double(CLOCKS_PER_SEC);
+	start = clock();
 	this->sortContainer(this->_deque, uDeque);
+	this->_dequeTime = double(clock() - start) / double(CLOCKS_PER_SEC);
 }
 
 /*
@@ -107,13 +124,15 @@ void    PmergeMe::sortContainer(Container &content, PairContainer &uPair)
 		return;
 
 	Container sortedFinal;
-	recursiveSort(pairContent, 0, pairContent.size() - 1, content);
+	recursiveSort(pairContent, 0, pairContent.size() - 1);
 
 	for (typename PairContainer::iterator it = pairContent.begin(); it != pairContent.end(); ++it)
 		sortedFinal.push_back((*it).first);
 
-	sortedFinal.insert(sortedFinal.begin(), pairContent[0].second);
+	sortedFinal.insert(sortedFinal.begin(), pairContent.front().second);
+
 	pairContent.erase(pairContent.begin());
+
 	for (typename PairContainer::iterator it = pairContent.begin(); it != pairContent.end(); ++it)
 		sortedFinal.insert(binarySearch(sortedFinal, (*it).second), (*it).second);
 
@@ -127,48 +146,46 @@ void    PmergeMe::sortContainer(Container &content, PairContainer &uPair)
 	content = sortedFinal;
 }
 
-template <class Container, class Type>
-void PmergeMe::recursiveSort(Container &content, int left, int right, Type &containerType)
+template <class Container>
+void PmergeMe::recursiveSort(Container &content, int left, int right)
 {
-    if (left < right) {
-        int middle = left + (right - left) / 2;
-        recursiveSort(content, left, middle, containerType);
-        recursiveSort(content, middle + 1, right, containerType);
-        merge(content, left, middle, right, containerType);
-    }
+	if (left < right) {
+		int middle = left + (right - left) / 2;
+		recursiveSort(content, left, middle);
+		recursiveSort(content, middle + 1, right);
+		merge(content, left, middle, right);
+	}
 }
 
-template <class Container, class Type>
-void PmergeMe::merge(Container &content, int left, int middle, int right, Type &containerType)
+template <class Container>
+void PmergeMe::merge(Container &content, int left, int middle, int right)
 {
-	(void)containerType;
-    int i, j, k;
+	int i, j, k;
 
-    Type L(middle - left + 1), R(right - middle);
+	Container L(middle - left + 1), R(right - middle);
 
-    for (i = 0; i < middle - left + 1; i++)
-        L[i] = content[left + i].first;
+	for (i = 0; i < middle - left + 1; i++)
+		L[i] = content[left + i];
 
-    for (j = 0; j < right - middle; j++)
-        R[j] = content[middle + 1 + j].first;
+	for (j = 0; j < right - middle; j++)
+		R[j] = content[middle + 1 + j];
 
-    i = 0;
-    j = 0;
-    k = left;
+	i = 0;
+	j = 0;
+	k = left;
 
-    while (i < middle - left + 1 && j < right - middle) 
+	while (i < middle - left + 1 && j < right - middle) 
 	{
-        if (L[i] <= R[j]) 
-            content[k++].first = L[i++];
+		if (L[i].first <= R[j].first)
+			content[k++] = L[i++];
 		else 
-            content[k++].first = R[j++];
-    }
+			content[k++] = R[j++];
+	}
 
-    for (; i < middle - left + 1; i++)
-        content[k++].first = L[i];
-
-    for (; j < right - middle; j++) 
-        content[k++].first = R[j];
+	for (; i < middle - left + 1; i++)
+		content[k++] = L[i];
+	for (; j < right - middle; j++) 
+		content[k++] = R[j];
 }
 
 template <class Container>
