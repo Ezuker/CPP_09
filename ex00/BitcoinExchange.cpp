@@ -6,7 +6,7 @@
 /*   By: bcarolle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 18:07:31 by bcarolle          #+#    #+#             */
-/*   Updated: 2024/05/30 19:51:40 by bcarolle         ###   ########.fr       */
+/*   Updated: 2024/06/02 19:17:28 by bcarolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,6 @@ static bool	validDate(std::string date)
 	int year, month, day;
 	char dash;
 	ss >> year >> dash >> month >> dash >> day;
-	// if (year < 2009 || year > 2024)
-	// 	return false;
 	if (month < 1 || month > 12)
 		return false;
 	if (day < 1)
@@ -88,23 +86,23 @@ bool	BitcoinExchange::parseData(std::ifstream &data)
 	return true;
 }
 
-void	BitcoinExchange::findData(std::string date, float amount)
+void	BitcoinExchange::findData(std::string date, long double amount)
 {
 	std::map<std::string, float>::iterator it = _data.lower_bound(date);
 	if (it->first == date)
 	{
-		std::cout << it->first << " => " << amount << " = " << it->second * amount << std::endl;
+		std::cout << date << " => " << amount << " = " << it->second * amount << std::endl;
 		return;
 	}
 	if (it != _data.begin())
 	{
 		it--;
-		std::cout << it->first << " => " << amount << " = " << it->second * amount << std::endl;
+		std::cout << date << " => " << amount << " = " << it->second * amount << std::endl;
 		return;
 	}
 	if (date < _data.begin()->first)
 	{
-		std::cout << _data.begin()->first << " => " << amount << " = " << _data.begin()->second * amount << std::endl;
+		std::cout << date << " => " << amount << " = " << _data.begin()->second * amount << std::endl;
 		return;
 	}
 }
@@ -136,7 +134,7 @@ bool	BitcoinExchange::parseInput(std::ifstream &input)
 			std::cout << "Error: bad date => " << line << std::endl;
 			continue;
 		}
-		float amount = std::strtold(line.substr(pos + 1).c_str(), NULL);
+		long double amount = std::strtold(line.substr(pos + 1).c_str(), NULL);
 		if (amount > 2147483647.0)
 		{
 			std::cout << "Error: too large a number." << std::endl;
