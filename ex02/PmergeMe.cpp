@@ -6,7 +6,7 @@
 /*   By: bcarolle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 19:57:02 by bcarolle          #+#    #+#             */
-/*   Updated: 2024/06/01 23:59:37 by bcarolle         ###   ########.fr       */
+/*   Updated: 2024/06/02 03:05:58 by bcarolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,19 +62,22 @@ void	PmergeMe::printPerf()
 
 void    PmergeMe::sort()
 {
-    this->sortContainer(this->_vector);
-    this->sortContainer(this->_deque);
+	std::vector<std::pair<int, int> > uPair;
+	std::deque<std::pair<int, int> > uDeque;
+
+    this->sortContainer(this->_vector, uPair);
+    this->sortContainer(this->_deque, uDeque);
 }
 
 /*
  * First of the pair is the max and the second one the lowest
  *
 */
-template <class Container>
-void    PmergeMe::sortContainer(Container &content)
+template <class Container, class PairContainer>
+void    PmergeMe::sortContainer(Container &content, PairContainer &uPair)
 {
-    std::vector<std::pair<int, int> > pairContainer;
-
+	(void)uPair;
+	PairContainer	pairContent;
     /* Group per pair */
     typename Container::iterator it = content.begin();
     while (it != content.end())
@@ -83,14 +86,83 @@ void    PmergeMe::sortContainer(Container &content)
         ++it;
         if (it != content.end()) {
             int second = *it;
-            pairContainer.push_back(std::make_pair(first, second));
+			if (first > second)
+				pairContent.push_back(std::make_pair(first, second));
+			else
+				pairContent.push_back(std::make_pair(second, first));
             ++it;
         }
     }
-    // std::cout << pairContainer.begin()->first << " " << pairContainer.begin()->second << std::endl;
+	if (!pairContent.size())
+		return;
 
-	std::sort(content.begin(), content.end());
-	content.insert(binarySearch(content, 6), 6);
+	Container sortedFinal;
+    recursiveSort(pairContent, 0, pairContent.size() - 1, content);
+	
+	for (typename PairContainer::iterator it = pairContent.begin(); it != pairContent.end(); ++it)
+		sortedFinal.push_back((*it).first);
+
+	content = sortedFinal;
+	content.insert(content.begin(), pairContent[0].second);
+	pairContent.erase(pairContent.begin());
+	for (typename PairContainer::iterator it = pairContent.begin(); it != pairContent.end(); ++it)
+		content.insert(binarySearch(content, (*it).second), (*it).second);
+}
+
+template <class Container, class Type>
+void PmergeMe::recursiveSort(Container &content, int left, int right, Type &containerType)
+{
+    if (left < right) {
+        int middle = left + (right - left) / 2;
+        recursiveSort(content, left, middle, containerType);
+        recursiveSort(content, middle + 1, right, containerType);
+        merge(content, left, middle, right, containerType);
+    }
+}
+
+template <class Container, class Type>
+void PmergeMe::merge(Container &content, int left, int middle, int right, Type &containerType)
+{
+	(void)containerType;
+    int i, j, k;
+
+    Type L(middle - left + 1), R(right - middle);
+
+    for (i = 0; i < middle - left + 1; i++)
+        L[i] = content[left + i].first;
+
+    for (j = 0; j < right - middle; j++)
+        R[j] = content[middle + 1 + j].first;
+
+    i = 0;
+    j = 0;
+    k = left;
+    while (i < middle - left + 1 && j < right - middle) 
+	{
+        if (L[i] <= R[j]) 
+		{
+            content[k].first = L[i];
+            i++;
+        } 
+		else 
+		{
+            content[k].first = R[j];
+            j++;
+        }
+        k++;
+    }
+    while (i < middle - left + 1)
+	{
+        content[k].first = L[i];
+        i++;
+        k++;
+    }
+    while (j < right - middle) 
+	{
+        content[k].first = R[j];
+        j++;
+        k++;
+    }
 }
 
 template <class Container>
