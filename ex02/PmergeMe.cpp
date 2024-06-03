@@ -6,7 +6,7 @@
 /*   By: bcarolle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 19:57:02 by bcarolle          #+#    #+#             */
-/*   Updated: 2024/06/02 18:56:18 by bcarolle         ###   ########.fr       */
+/*   Updated: 2024/06/03 13:55:44 by bcarolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,11 @@ PmergeMe::~PmergeMe()
 
 bool	isDigit(const std::string str)
 {
+	if (str.size() == 1 && str[0] == '-')
+		return false;
 	for (size_t i = 0; i < str.size(); i++)
 	{
-		if (!isdigit(str[i]))
+		if (!isdigit(str[i]) && str[0] != '-')
 			return false;
 	}
 	return true;
@@ -76,9 +78,9 @@ void	PmergeMe::printContainer()
 void	PmergeMe::printPerf()
 {
 	std::cout << "Time to process a range of " << this->_deque.size() << " elements with std::deque  : ";
-	std::cout << std::fixed << this->_dequeTime << std::setprecision(6) << " us" << std::endl;
+	std::cout << std::fixed << this->_dequeTime * 1000000 << std::setprecision(6) << " us" << std::endl;
 	std::cout << "Time to process a range of " << this->_vector.size() << " elements with std::vector : ";
-	std::cout << std::fixed << this->_vectorTime << std::setprecision(6) << " us" << std::endl;
+	std::cout << std::fixed << this->_vectorTime * 1000000 << std::setprecision(6) << " us" << std::endl;
 }
 
 
