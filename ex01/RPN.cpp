@@ -6,7 +6,7 @@
 /*   By: bcarolle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 15:28:11 by bcarolle          #+#    #+#             */
-/*   Updated: 2024/05/29 19:56:54 by bcarolle         ###   ########.fr       */
+/*   Updated: 2024/06/03 14:37:37 by bcarolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ void RPN::doOperation(char c)
 					this->_numbers.push(tmp2 * tmp);
 					break;
 				case '/':
+					if (tmp == 0)
+						throw	std::logic_error("Divide by zero is not good");
 					this->_numbers.push(tmp2 / tmp);
 					break;
 				case '+':

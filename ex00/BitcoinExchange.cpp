@@ -6,7 +6,7 @@
 /*   By: bcarolle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 18:07:31 by bcarolle          #+#    #+#             */
-/*   Updated: 2024/06/02 19:17:28 by bcarolle         ###   ########.fr       */
+/*   Updated: 2024/06/03 14:58:18 by bcarolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,7 @@ bool	BitcoinExchange::parseInput(std::ifstream &input)
 			continue;
 		}
 		long double amount = std::strtold(line.substr(pos + 1).c_str(), NULL);
-		if (amount > 2147483647.0)
+		if (amount > 1000.0)
 		{
 			std::cout << "Error: too large a number." << std::endl;
 			continue;
