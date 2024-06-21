@@ -6,11 +6,12 @@
 /*   By: bcarolle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 19:57:02 by bcarolle          #+#    #+#             */
-/*   Updated: 2024/06/03 13:55:44 by bcarolle         ###   ########.fr       */
+/*   Updated: 2024/06/21 17:06:28 by bcarolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "PmergeMe.hpp"
+int32_t	jacobsthal (int32_t n);
 
 PmergeMe::PmergeMe()
 {
@@ -132,11 +133,21 @@ void    PmergeMe::sortContainer(Container &content, PairContainer &uPair)
 		sortedFinal.push_back((*it).first);
 
 	sortedFinal.insert(sortedFinal.begin(), pairContent.front().second);
-
 	pairContent.erase(pairContent.begin());
 
-	for (typename PairContainer::iterator it = pairContent.begin(); it != pairContent.end(); ++it)
-		sortedFinal.insert(binarySearch(sortedFinal, (*it).second), (*it).second);
+	int index = 0;
+	for (typename PairContainer::iterator it = pairContent.begin(); it != pairContent.end();)
+	{
+		size_t groupSize = jacobsthal(index++);
+		if (groupSize > pairContent.size())
+			groupSize = pairContent.size();
+		PairContainer jacobGroup(pairContent.begin(), pairContent.begin() + groupSize);
+		for (typename PairContainer::iterator itJacob = jacobGroup.begin(); itJacob != jacobGroup.end(); ++itJacob)
+			sortedFinal.insert(binarySearch(sortedFinal, (*itJacob).second), (*itJacob).second);
+		pairContent.erase(pairContent.begin(), pairContent.begin() + groupSize);
+		if (pairContent.size() == 0)
+			break ;
+	}
 
 	if (content.size() % 2 == 1)
 	{
@@ -201,7 +212,7 @@ typename Container::iterator	PmergeMe::binarySearch(Container &content, int toPu
 		if (content[middle] < toPush)
 			left = middle + 1;
 		else if (content[middle] > toPush)
-			right = middle;
+			right = middle - 1;
 		else
 			return content.begin() + middle;
 		if (content[left] > toPush && content[right] > toPush)
@@ -210,4 +221,14 @@ typename Container::iterator	PmergeMe::binarySearch(Container &content, int toPu
 			return content.begin() + right + 1;
 	}
 	return content.begin();
+}
+
+int32_t	jacobsthal (int32_t n)
+{
+	if (n == 0)
+		return (2);
+	else if (n == 1)
+		return (2);
+	else
+		return (jacobsthal(n - 2) * 2 + jacobsthal(n - 1));
 }
