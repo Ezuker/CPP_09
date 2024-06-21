@@ -6,12 +6,12 @@
 /*   By: bcarolle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 19:57:02 by bcarolle          #+#    #+#             */
-/*   Updated: 2024/06/21 17:06:28 by bcarolle         ###   ########.fr       */
+/*   Updated: 2024/06/21 17:08:19 by bcarolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "PmergeMe.hpp"
-int32_t	jacobsthal (int32_t n);
+size_t	jacobsthal (size_t n);
 
 PmergeMe::PmergeMe()
 {
@@ -223,7 +223,7 @@ typename Container::iterator	PmergeMe::binarySearch(Container &content, int toPu
 	return content.begin();
 }
 
-int32_t	jacobsthal (int32_t n)
+size_t	jacobsthal (size_t n)
 {
 	if (n == 0)
 		return (2);
