@@ -6,7 +6,7 @@
 /*   By: bcarolle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 15:28:11 by bcarolle          #+#    #+#             */
-/*   Updated: 2024/06/03 14:37:37 by bcarolle         ###   ########.fr       */
+/*   Updated: 2024/06/22 21:33:29 by bcarolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,11 @@ void RPN::doOperation(char c)
 {
 	if (this->_numbers.size())
 	{
-		int tmp = this->_numbers.top();
+		float tmp = this->_numbers.top();
 		this->_numbers.pop();
 		if (this->_numbers.size())
 		{
-			int tmp2 = this->_numbers.top();
+			float tmp2 = this->_numbers.top();
 			this->_numbers.pop();
 			switch (c)
 			{

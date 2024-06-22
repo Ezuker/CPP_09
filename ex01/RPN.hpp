@@ -6,7 +6,7 @@
 /*   By: bcarolle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 15:28:09 by bcarolle          #+#    #+#             */
-/*   Updated: 2024/05/29 19:48:05 by bcarolle         ###   ########.fr       */
+/*   Updated: 2024/06/22 21:33:13 by bcarolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ class RPN
 		void calculate();
 		void printResult();
 	private:
-		std::stack<int> _numbers;
+		std::stack<float> _numbers;
 		void	reverseStack();
 		void	doOperation(char c);
 };
