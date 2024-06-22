@@ -6,7 +6,7 @@
 /*   By: bcarolle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 19:57:05 by bcarolle          #+#    #+#             */
-/*   Updated: 2024/06/02 18:54:02 by bcarolle         ###   ########.fr       */
+/*   Updated: 2024/06/22 16:43:12 by bcarolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ class PmergeMe
 		void    printPerf();
 		void    sort();
 	private:
+		PmergeMe(const PmergeMe &cpy);
+		PmergeMe	&operator=(const PmergeMe &rhs);
 		template <class Container, class PairContainer>
 		void    sortContainer(Container &content, PairContainer &uPair);
 

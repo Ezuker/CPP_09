@@ -6,7 +6,7 @@
 /*   By: bcarolle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 18:07:31 by bcarolle          #+#    #+#             */
-/*   Updated: 2024/06/03 14:58:18 by bcarolle         ###   ########.fr       */
+/*   Updated: 2024/06/22 16:40:31 by bcarolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,21 @@ BitcoinExchange::BitcoinExchange()
 
 BitcoinExchange::~BitcoinExchange()
 {}
+
+BitcoinExchange::BitcoinExchange(const BitcoinExchange &cpy)
+{
+	*this = cpy;
+}
+
+BitcoinExchange	&BitcoinExchange::operator=(const BitcoinExchange &rhs)
+{
+	if (this != &rhs)
+	{
+		this->_data = rhs._data;
+		this->_input = rhs._input;
+	}
+	return (*this);
+}
 
 static bool	validDate(std::string date)
 {

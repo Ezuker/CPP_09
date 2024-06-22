@@ -6,7 +6,7 @@
 /*   By: bcarolle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 18:07:40 by bcarolle          #+#    #+#             */
-/*   Updated: 2024/06/02 19:14:34 by bcarolle         ###   ########.fr       */
+/*   Updated: 2024/06/22 16:38:56 by bcarolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,10 @@ class BitcoinExchange
 {
 	public:
 		BitcoinExchange();
+		BitcoinExchange(const BitcoinExchange &cpy);
 		~BitcoinExchange();
+
+		BitcoinExchange	&operator=(const BitcoinExchange &rhs);
 		
 		bool	parseInput(std::ifstream &input);
 		bool	parseData(std::ifstream &data);
