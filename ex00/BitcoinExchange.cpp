@@ -6,7 +6,7 @@
 /*   By: bcarolle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 18:07:31 by bcarolle          #+#    #+#             */
-/*   Updated: 2024/06/22 16:40:31 by bcarolle         ###   ########.fr       */
+/*   Updated: 2024/06/22 22:01:36 by bcarolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,13 @@ bool	BitcoinExchange::parseData(std::ifstream &data)
 void	BitcoinExchange::findData(std::string date, long double amount)
 {
 	std::map<std::string, float>::iterator it = _data.lower_bound(date);
+	if (it == _data.end())
+	{
+		std::map<std::string, float>::iterator ite = --_data.end();
+		double last = ite->second;
+		std::cout << date << " => " << amount << " = " << last * amount << std::endl;
+		return;
+	}
 	if (it->first == date)
 	{
 		std::cout << date << " => " << amount << " = " << it->second * amount << std::endl;
@@ -122,6 +129,25 @@ void	BitcoinExchange::findData(std::string date, long double amount)
 	}
 }
 
+bool	isDigit(const std::string str)
+{
+	size_t i = 0;
+	if (str.empty())
+		return false;
+	for (; i < str.size(); i++)
+	{
+		if (str[i] == ' ')
+			continue;
+		break;
+	}
+	for (; i < str.size(); i++)
+	{
+		if (!isdigit(str[i]) && str[i] != '.' && str[i] != '-')
+			return false;
+	}
+	return true;
+}
+
 bool	BitcoinExchange::parseInput(std::ifstream &input)
 {
 	std::string first;
@@ -137,19 +163,24 @@ bool	BitcoinExchange::parseInput(std::ifstream &input)
 		std::getline(input, line);
 		if (line.empty())
 			continue;
-		size_t pos = line.find('|');
+		size_t pos = line.find(" | ");
 		if (pos == std::string::npos)
 		{
 			std::cout << "Error: bad input => " << line << std::endl;
 			continue;
 		}
-		std::string date = line.substr(0, pos - 1);
+		std::string date = line.substr(0, pos);
 		if (!validDate(date))
 		{
 			std::cout << "Error: bad date => " << line << std::endl;
 			continue;
 		}
-		long double amount = std::strtold(line.substr(pos + 1).c_str(), NULL);
+		if (!isDigit(line.substr(pos + 2).c_str()))
+		{
+			std::cout << "Error: Not a number." << std::endl;
+			continue;
+		}
+		long double amount = std::strtold(line.substr(pos + 2).c_str(), NULL);
 		if (amount > 1000.0)
 		{
 			std::cout << "Error: too large a number." << std::endl;
