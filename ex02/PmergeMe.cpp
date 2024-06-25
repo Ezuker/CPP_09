@@ -6,7 +6,7 @@
 /*   By: bcarolle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 19:57:02 by bcarolle          #+#    #+#             */
-/*   Updated: 2024/06/22 16:43:05 by bcarolle         ###   ########.fr       */
+/*   Updated: 2024/06/25 21:43:42 by bcarolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,24 +71,36 @@ void	PmergeMe::parseInput(char **array)
 	}
 }
 
+
+template<class Container>
+void	checker(Container toCheck)
+{
+	Container check = toCheck;
+	std::sort(check.begin(), check.end());
+	if (check == toCheck)
+		std::cout << "\033[32m""is sorted!\033[0m" << std::endl;
+	else
+		std::cout << "\033[31m""good luck for the repush baha\033[0m" << std::endl;
+}
+
 void	PmergeMe::printContainer()
 {
 	{	
 		std::cout << "	Vector : ";
 		std::vector<int>::iterator it = this->_vector.begin();
 		for (; it != this->_vector.end(); ++it)
-		{
 			std::cout << *it << " ";
-		}
+		std::cout << " Vector : ";
+		checker(_vector);
 		std::cout << std::endl;
 	}
 	{	
 		std::cout << "	Deque : ";
 		std::deque<int>::iterator it = this->_deque.begin();
 		for (; it != this->_deque.end(); ++it)
-		{
 			std::cout << *it << " ";
-		}
+		std::cout << " Deque : ";
+		checker(_deque);
 		std::cout << std::endl;
 	}
 }
@@ -223,18 +235,18 @@ typename Container::iterator	PmergeMe::binarySearch(Container &content, int toPu
 {
 	int left = 0;
 	int right = content.size() - 1;
-	while (left <= right)
+	while (left < right)
 	{
 		int middle = floor((left + right) / 2);
 		if (content[middle] < toPush)
 			left = middle + 1;
 		else if (content[middle] > toPush)
-			right = middle - 1;
+			right = middle;
 		else
 			return content.begin() + middle;
-		if (content[left] > toPush && content[right] > toPush)
+		if (right > 0 && content[left] > toPush && content[right] > toPush)
 			return content.begin() + left;
-		if (content[left] < toPush && content[right] < toPush)
+		if (right > 0 && content[left] < toPush && content[right] < toPush)
 			return content.begin() + right + 1;
 	}
 	return content.begin();
