@@ -6,7 +6,7 @@
 /*   By: bcarolle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 19:57:05 by bcarolle          #+#    #+#             */
-/*   Updated: 2024/06/22 16:43:12 by bcarolle         ###   ########.fr       */
+/*   Updated: 2024/06/26 19:11:45 by bcarolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,14 +38,14 @@ class PmergeMe
 		template <class Container, class PairContainer>
 		void    sortContainer(Container &content, PairContainer &uPair);
 
-		template <class Container>
-		void    recursiveSort(Container &content, int left, int right);
+		template <class PairContainer>
+		void    recursiveSort(PairContainer &content, int left, int right);
+
+		template <class PairContainer>
+		void    merge(PairContainer &content, int left, int middle, int right);
 
 		template <class Container>
-		void    merge(Container &content, int left, int middle, int right);
-
-		template <class Container>
-		typename Container::iterator    binarySearch(Container &content, int toPush);
+		typename Container::iterator    binarySearch(Container &content, typename Container::iterator xi, int toPush);
 		std::vector<int> _vector;
 		std::deque<int> _deque;
 		double	_dequeTime;

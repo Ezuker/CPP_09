@@ -6,7 +6,7 @@
 /*   By: bcarolle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 18:07:31 by bcarolle          #+#    #+#             */
-/*   Updated: 2024/06/25 21:17:43 by bcarolle         ###   ########.fr       */
+/*   Updated: 2024/06/26 18:02:15 by bcarolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,13 +117,13 @@ void	BitcoinExchange::findData(std::string date, long double amount)
 	}
 	if (it != _data.begin())
 	{
-		it--;
+		it--; //Voir pour la date precedente
 		std::cout << date << " => " << amount << " = " << it->second * amount << std::endl;
 		return;
 	}
 	if (date < _data.begin()->first)
 	{
-		std::cout << date << " => " << amount << " = " << _data.begin()->second * amount << std::endl;
+		std::cout << "Error: bad date, Bitcoin Doesn't exist " << date << std::endl;
 		return;
 	}
 }

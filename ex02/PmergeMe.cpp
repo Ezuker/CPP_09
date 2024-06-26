@@ -6,7 +6,7 @@
 /*   By: bcarolle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 19:57:02 by bcarolle          #+#    #+#             */
-/*   Updated: 2024/06/25 21:43:42 by bcarolle         ###   ########.fr       */
+/*   Updated: 2024/06/26 19:20:51 by bcarolle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,8 +171,9 @@ void    PmergeMe::sortContainer(Container &content, PairContainer &uPair)
 		if (groupSize > pairContent.size())
 			groupSize = pairContent.size();
 		PairContainer jacobGroup(pairContent.begin(), pairContent.begin() + groupSize);
+		std::reverse(jacobGroup.begin(), jacobGroup.end());
 		for (typename PairContainer::iterator itJacob = jacobGroup.begin(); itJacob != jacobGroup.end(); ++itJacob)
-			sortedFinal.insert(binarySearch(sortedFinal, (*itJacob).second), (*itJacob).second);
+			sortedFinal.insert(binarySearch(sortedFinal, std::find(sortedFinal.begin(), sortedFinal.end(), jacobGroup[0].first), (*itJacob).second), (*itJacob).second);
 		pairContent.erase(pairContent.begin(), pairContent.begin() + groupSize);
 		if (pairContent.size() == 0)
 			break ;
@@ -182,14 +183,14 @@ void    PmergeMe::sortContainer(Container &content, PairContainer &uPair)
 	{
 		int struggler = content.back();
 		content = sortedFinal;
-		content.insert(binarySearch(content, struggler), struggler);
+		content.insert(binarySearch(content, content.end(), struggler), struggler);
 		return;
 	}
 	content = sortedFinal;
 }
 
-template <class Container>
-void PmergeMe::recursiveSort(Container &content, int left, int right)
+template <class PairContainer>
+void PmergeMe::recursiveSort(PairContainer &content, int left, int right)
 {
 	if (left < right) {
 		int middle = left + (right - left) / 2;
@@ -199,12 +200,12 @@ void PmergeMe::recursiveSort(Container &content, int left, int right)
 	}
 }
 
-template <class Container>
-void PmergeMe::merge(Container &content, int left, int middle, int right)
+template <class PairContainer>
+void PmergeMe::merge(PairContainer &content, int left, int middle, int right)
 {
 	int i, j, k;
 
-	Container L(middle - left + 1), R(right - middle);
+	PairContainer L(middle - left + 1), R(right - middle);
 
 	for (i = 0; i < middle - left + 1; i++)
 		L[i] = content[left + i];
@@ -231,10 +232,10 @@ void PmergeMe::merge(Container &content, int left, int middle, int right)
 }
 
 template <class Container>
-typename Container::iterator	PmergeMe::binarySearch(Container &content, int toPush)
+typename Container::iterator	PmergeMe::binarySearch(Container &content, typename Container::iterator xi, int toPush)
 {
 	int left = 0;
-	int right = content.size() - 1;
+	int right = std::distance(content.begin(), xi) - 1;
 	while (left < right)
 	{
 		int middle = floor((left + right) / 2);
